@@ -3,7 +3,7 @@
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Note**: This template is filled in by the `/speckit.plan` command. See `.github/prompts/speckit.plan.prompt.md` for execution guidance.
 
 ## Summary
 
@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] UX-first criteria defined: every user story has explicit UX acceptance criteria and measurable outcome.
+- [ ] TDD plan defined: tests are listed before implementation tasks for each user story.
+- [ ] Red proof required: plan defines how initial failing tests will be captured before coding.
+- [ ] Observability scope defined: logging/events and failure signals are documented for changed flows.
+- [ ] Simplicity justified: complex designs include written rationale and rejected simpler alternatives.
 
 ## Project Structure
 

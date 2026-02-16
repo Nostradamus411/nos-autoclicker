@@ -18,6 +18,7 @@
   - Tested independently
   - Deployed independently
   - Demonstrated to users independently
+  - Evaluated for UX quality independently
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -27,6 +28,8 @@
 **Why this priority**: [Explain the value and why it has this priority level]
 
 **Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+
+**UX Acceptance Criteria**: [Define interaction quality expectations: clarity, speed, and error recovery for this story]
 
 **Acceptance Scenarios**:
 
@@ -43,6 +46,8 @@
 
 **Independent Test**: [Describe how this can be tested independently]
 
+**UX Acceptance Criteria**: [Define interaction quality expectations for this story]
+
 **Acceptance Scenarios**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
@@ -56,6 +61,8 @@
 **Why this priority**: [Explain the value and why it has this priority level]
 
 **Independent Test**: [Describe how this can be tested independently]
+
+**UX Acceptance Criteria**: [Define interaction quality expectations for this story]
 
 **Acceptance Scenarios**:
 
@@ -113,3 +120,4 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-005**: [UX metric, e.g., "95% of users complete the primary flow without assistance or confusion prompts"]

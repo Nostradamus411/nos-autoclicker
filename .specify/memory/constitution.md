@@ -1,50 +1,92 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: N/A (template) → 1.0.0
+- Modified principles:
+	- Template Principle 1 → I. UX Is the Product
+	- Template Principle 2 → II. Test-First Delivery (Red-Green-Refactor)
+	- Template Principle 3 → III. Minimal, Observable Automation
+	- Template Principle 4 → IV. Simplicity and Maintainability
+	- Template Principle 5 → V. Safe Change and Review Discipline
+- Added sections:
+	- Product & Experience Standards
+	- Engineering Workflow & Quality Gates
+- Removed sections:
+	- None
+- Templates requiring updates:
+	- ✅ updated: .specify/templates/plan-template.md
+	- ✅ updated: .specify/templates/spec-template.md
+	- ✅ updated: .specify/templates/tasks-template.md
+	- ⚠ pending: .specify/templates/commands/*.md (directory not present)
+- Follow-up TODOs:
+	- None.
+-->
+
+# Nos Autoclicker Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. UX Is the Product
+Every feature MUST prioritize user experience quality as a first-class outcome, not a
+post-implementation polish pass. Form and function MUST be treated as one decision:
+interactions MUST feel intentional, clear, and consistent. Feature proposals and reviews
+MUST include explicit UX acceptance criteria and reject changes that degrade usability.
+Rationale: product value is delivered through user perception and task success, not
+through implementation volume.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Test-First Delivery (Red-Green-Refactor)
+All implementation work MUST follow strict TDD. For each behavior change: write tests
+first, run and record failure (Red), implement the minimum code to pass (Green), then
+refactor while preserving passing tests (Refactor). No feature code may be merged without
+evidence that the target tests failed before implementation and pass after.
+Rationale: this minimizes regressions, constrains scope creep, and keeps behavior aligned
+with requirements.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Minimal, Observable Automation
+Automation behavior MUST be deterministic, debuggable, and measurable. New workflows
+MUST emit actionable logs/events for key state transitions, retries, and failures.
+Features MUST define success/failure signals that can be validated in development and CI.
+Rationale: automation without observability is fragile and expensive to support.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Simplicity and Maintainability
+Solutions MUST default to the simplest design that satisfies current requirements.
+Unjustified abstraction, speculative architecture, and duplicate logic MUST be avoided.
+Each change MUST keep code paths understandable to a new maintainer within one review
+session.
+Rationale: lower complexity accelerates delivery and reduces long-term defects.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Safe Change and Review Discipline
+Every change MUST map to a requirement, include targeted tests, and pass constitutional
+checks in planning artifacts. Pull requests MUST document scope, risks, and rollback
+strategy when behavior changes are user-visible or operationally significant.
+Rationale: explicit traceability and review rigor prevent accidental product regressions.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Product & Experience Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Every spec MUST include measurable UX outcomes (task success, clarity, or speed).
+- Acceptance criteria MUST describe both functional correctness and interaction quality.
+- UI/UX decisions MUST prefer consistency with established project behavior over novelty.
+- Usability regressions discovered during review or testing MUST block merge until resolved.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Engineering Workflow & Quality Gates
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+1. Define behavior in spec and tasks with explicit UX and test expectations.
+2. Implement tests first and capture initial failure before production code changes.
+3. Implement minimum viable change to satisfy tests and user-story acceptance.
+4. Refactor for readability and maintainability with tests continuously passing.
+5. Run CI checks (tests, lint, and relevant build steps) before merge.
+6. Document operational impact for any automation behavior change.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution supersedes ad hoc team habits for planning, implementation, and
+	review decisions.
+- Amendments MUST be proposed through a pull request that includes rationale, impact,
+	migration actions (if needed), and updates to dependent templates and guidance files.
+- Versioning policy for this constitution follows semantic versioning:
+	- MAJOR: removals or redefinitions that break prior governance expectations.
+	- MINOR: new principle or materially expanded mandatory guidance.
+	- PATCH: wording clarifications and non-semantic refinements.
+- Compliance review is mandatory in every plan and pull request; reviewers MUST block
+	merge when constitutional gates are unmet.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-02-15 | **Last Amended**: 2026-02-15

@@ -1,0 +1,36 @@
+# Rust build artifacts
+/target/
+debug/
+release/
+*.rs.bk
+*.rlib
+*.prof*
+
+# Dependency lock (keep Cargo.lock for binary crate)
+# Cargo.lock is committed for reproducible builds
+
+# IDE / Editor
+.vscode/settings.json
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Session logs (JSONL runtime output)
+/logs/
+
+# Build verification scratch
+/checksums.txt

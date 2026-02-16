@@ -1,0 +1,371 @@
+openapi: 3.0.3
+info:
+  title: Autoclicker Local Control API
+  version: 0.1.0
+  description: |
+    Loopback control contract between UI/control surfaces and the autoclick engine.
+    No external/public network exposure is required.
+servers:
+  - url: http://127.0.0.1:43123
+    description: Localhost only
+paths:
+  /profiles:
+    get:
+      summary: List profiles
+      operationId: listProfiles
+      responses:
+        '200':
+          description: Profiles returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profiles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ClickProfile'
+    post:
+      summary: Create profile
+      operationId: createProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClickProfileCreateRequest'
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClickProfile'
+  /profiles/{profileId}:
+    get:
+      summary: Get profile
+      operationId: getProfile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClickProfile'
+        '404':
+          description: Not found
+    put:
+      summary: Update profile
+      operationId: updateProfile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClickProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClickProfile'
+    delete:
+      summary: Delete profile
+      operationId: deleteProfile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+  /run/start:
+    post:
+      summary: Start run session
+      operationId: startRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [profileId]
+              properties:
+                profileId:
+                  type: string
+      responses:
+        '200':
+          description: Session started or waiting for conditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunSession'
+        '422':
+          description: Validation failed
+  /run/stop:
+    post:
+      summary: Stop run session
+      operationId: stopRun
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  $ref: '#/components/schemas/StopReason'
+      responses:
+        '200':
+          description: Session stopped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunSession'
+  /run/panic-stop:
+    post:
+      summary: Panic stop
+      operationId: panicStop
+      responses:
+        '200':
+          description: Session forcibly stopped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunSession'
+  /run/status:
+    get:
+      summary: Read current run status
+      operationId: getRunStatus
+      responses:
+        '200':
+          description: Current status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  activeSession:
+                    nullable: true
+                    allOf:
+                      - $ref: '#/components/schemas/RunSession'
+                  state:
+                    $ref: '#/components/schemas/RunState'
+  /events:
+    get:
+      summary: List recent events
+      operationId: listEvents
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+      responses:
+        '200':
+          description: Recent events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventRecord'
+  /release/manifest/{version}:
+    get:
+      summary: Fetch release reproducibility manifest
+      operationId: getReleaseManifest
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Manifest for deterministic verification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseArtifactManifest'
+components:
+  schemas:
+    ClickAction:
+      type: string
+      enum: [left, right, middle, double]
+    ScopeMode:
+      type: string
+      enum: [focused_only, global]
+    PositionMode:
+      type: string
+      enum: [cursor, fixed]
+    ThemeVariant:
+      type: string
+      enum: [mad_scientist_neon, high_contrast]
+    RunState:
+      type: string
+      enum: [idle, waiting_condition, running, stopped, error]
+    StopReason:
+      type: string
+      enum: [manual_stop, timed_stop, panic_stop, validation_block, interruption, focus_loss_pause]
+    ClickProfile:
+      type: object
+      required: [id, name, clickAction, cps, scopeMode, positionMode, themeVariant]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+        clickAction:
+          $ref: '#/components/schemas/ClickAction'
+        cps:
+          type: integer
+          minimum: 1
+          maximum: 50
+        scopeMode:
+          $ref: '#/components/schemas/ScopeMode'
+        positionMode:
+          $ref: '#/components/schemas/PositionMode'
+        fixedPositionX:
+          type: integer
+          nullable: true
+        fixedPositionY:
+          type: integer
+          nullable: true
+        jitterPercent:
+          type: integer
+          minimum: 0
+          maximum: 30
+        stationaryStartEnabled:
+          type: boolean
+        stationarySeconds:
+          type: integer
+          minimum: 1
+          maximum: 300
+          nullable: true
+        stopAfterEnabled:
+          type: boolean
+        stopAfterSeconds:
+          type: integer
+          minimum: 1
+          maximum: 300
+          nullable: true
+        maxSessionEnabled:
+          type: boolean
+        maxSessionSeconds:
+          type: integer
+          minimum: 1
+          maximum: 300
+          nullable: true
+        cooldownEnabled:
+          type: boolean
+        cooldownSeconds:
+          type: integer
+          minimum: 1
+          maximum: 300
+          nullable: true
+        startHotkey:
+          type: string
+        stopHotkey:
+          type: string
+        panicHotkey:
+          type: string
+        themeVariant:
+          $ref: '#/components/schemas/ThemeVariant'
+    ClickProfileCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/ClickProfile'
+      required:
+        - name
+      properties:
+        id:
+          nullable: true
+    ClickProfileUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/ClickProfile'
+    RunSession:
+      type: object
+      required: [sessionId, profileId, startedAt, state]
+      properties:
+        sessionId:
+          type: string
+        profileId:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+          nullable: true
+        state:
+          $ref: '#/components/schemas/RunState'
+        stopReason:
+          $ref: '#/components/schemas/StopReason'
+          nullable: true
+        effectiveCps:
+          type: integer
+        totalClicks:
+          type: integer
+    EventRecord:
+      type: object
+      required: [timestamp, level, eventType, message]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        level:
+          type: string
+          enum: [debug, info, warn, error]
+        eventType:
+          type: string
+        message:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    ReleaseArtifactManifest:
+      type: object
+      required: [version, gitTag, gitCommit, targetTriple, rustToolchain, artifactName, sha256, reproInstructionsUrl]
+      properties:
+        version:
+          type: string
+        gitTag:
+          type: string
+        gitCommit:
+          type: string
+        targetTriple:
+          type: string
+        rustToolchain:
+          type: string
+        buildTimestampPolicy:
+          type: string
+        artifactName:
+          type: string
+        sha256:
+          type: string
+        reproInstructionsUrl:
+          type: string
+          format: uri
