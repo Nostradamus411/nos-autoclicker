@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-windows:
+    name: Build Windows Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-gnu
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            build-essential \
+            pkg-config \
+            mingw-w64 \
+            libxkbcommon-dev \
+            libwayland-dev \
+            libxcb-shape0-dev \
+            libxcb-xfixes0-dev \
+            libx11-dev \
+            libxi-dev \
+            libxrandr-dev \
+            libxtst-dev \
+            libxdo-dev
+
+      - name: Build Windows binary
+        run: cargo build --release --locked --target x86_64-pc-windows-gnu
+        env:
+          CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER: x86_64-w64-mingw32-gcc
+
+      - name: Generate checksums
+        run: |
+          cd target/x86_64-pc-windows-gnu/release
+          sha256sum nos-autoclicker.exe > nos-autoclicker.exe.sha256
+          cat nos-autoclicker.exe.sha256
+
+      - name: Generate manifest
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SHA256=$(cat target/x86_64-pc-windows-gnu/release/nos-autoclicker.exe.sha256 | awk '{print $1}')
+          cat > release-manifest.json <<EOF
+          {
+            "version": "$VERSION",
+            "git_tag": "$GITHUB_REF_NAME",
+            "git_commit": "$GITHUB_SHA",
+            "rust_toolchain": "$(rustc --version)",
+            "target": "x86_64-pc-windows-gnu",
+            "binary_sha256": "$SHA256"
+          }
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/x86_64-pc-windows-gnu/release/nos-autoclicker.exe
+            target/x86_64-pc-windows-gnu/release/nos-autoclicker.exe.sha256
+            release-manifest.json
+          generate_release_notes: true

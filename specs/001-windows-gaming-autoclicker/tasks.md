@@ -23,10 +23,10 @@
 
 **Purpose**: Project initialization, dependency configuration, and directory scaffolding
 
-- [ ] T001 Create project directory structure per plan.md (`src/app/`, `src/engine/`, `src/domain/`, `src/infra/`, `src/release/`, `tests/unit/`, `tests/integration/`, `tests/contract/`, `scripts/`)
-- [ ] T002 Initialize Rust project with `cargo init --bin` and configure Cargo.toml (edition 2024, name, version, binary target)
-- [ ] T003 [P] Add production dependencies to Cargo.toml (`eframe`, `egui`, `enigo`, `global-hotkey`, `device_query`, `serde`, `serde_json`, `toml`, `thiserror`, `tracing`, `tracing-subscriber`, `uuid`, `chrono`)
-- [ ] T004 [P] Add dev dependencies to Cargo.toml (`proptest`) and create `rust-toolchain.toml` with pinned stable toolchain
+- [x] T001 Create project directory structure per plan.md (`src/app/`, `src/engine/`, `src/domain/`, `src/infra/`, `src/release/`, `tests/unit/`, `tests/integration/`, `tests/contract/`, `scripts/`)
+- [x] T002 Initialize Rust project with `cargo init --bin` and configure Cargo.toml (edition 2024, name, version, binary target)
+- [x] T003 [P] Add production dependencies to Cargo.toml (`eframe`, `egui`, `enigo`, `global-hotkey`, `device_query`, `serde`, `serde_json`, `toml`, `thiserror`, `tracing`, `tracing-subscriber`, `uuid`, `chrono`)
+- [x] T004 [P] Add dev dependencies to Cargo.toml (`proptest`) and create `rust-toolchain.toml` with pinned stable toolchain
 
 ---
 
@@ -36,13 +36,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Define domain enums (`ClickAction`, `ScopeMode`, `PositionMode`, `ThemeVariant`, `RunState`, `StopReason`) and shared constants (CPS bounds 1–50, timer bounds 1–300) in src/domain/settings.rs
-- [ ] T006 [P] Create `ClickProfile` struct with all field definitions from data-model.md in src/domain/profile.rs
-- [ ] T007 [P] Create `RunSession` struct with state, timing, and metrics fields in src/domain/session.rs
-- [ ] T008 [P] Create `EventRecord` struct with timestamp, level, event type, message, and metadata in src/domain/events.rs
-- [ ] T009 [P] Define typed error variants with `thiserror` (`ValidationError`, `EngineError`, `PersistenceError`, `HotkeyError`, `InputError`) in src/domain/errors.rs
-- [ ] T010 Setup `tracing-subscriber` initialization and JSONL file appender for session logs in src/infra/telemetry.rs
-- [ ] T011 Create module declarations (`mod app`, `mod engine`, `mod domain`, `mod infra`, `mod release`) and minimal app skeleton in src/main.rs
+- [x] T005 Define domain enums (`ClickAction`, `ScopeMode`, `PositionMode`, `ThemeVariant`, `RunState`, `StopReason`) and shared constants (CPS bounds 1–50, timer bounds 1–300) in src/domain/settings.rs
+- [x] T006 [P] Create `ClickProfile` struct with all field definitions from data-model.md in src/domain/profile.rs
+- [x] T007 [P] Create `RunSession` struct with state, timing, and metrics fields in src/domain/session.rs
+- [x] T008 [P] Create `EventRecord` struct with timestamp, level, event type, message, and metadata in src/domain/events.rs
+- [x] T009 [P] Define typed error variants with `thiserror` (`ValidationError`, `EngineError`, `PersistenceError`, `HotkeyError`, `InputError`) in src/domain/errors.rs
+- [x] T010 Setup `tracing-subscriber` initialization and JSONL file appender for session logs in src/infra/telemetry.rs
+- [x] T011 Create module declarations (`mod app`, `mod engine`, `mod domain`, `mod infra`, `mod release`) and minimal app skeleton in src/main.rs
 
 **Checkpoint**: Foundation ready — user story implementation can now begin
 
@@ -58,24 +58,24 @@
 
 > **NOTE: Write these tests FIRST, capture failure evidence (Red phase), then implement until they pass (Green phase)**
 
-- [ ] T012 [P] [US1] Write failing unit tests for ClickProfile CPS validation: reject <1 and >50, accept 1, 25, 50, and verify default scope is `focused_only` in tests/unit/test_profile_validation.rs
-- [ ] T013 [P] [US1] Write failing unit tests for click engine state transitions: `idle→running`, `running→stopped` (manual), invalid transitions rejected, and state query correctness in tests/unit/test_click_engine.rs
-- [ ] T014 [P] [US1] Write failing unit tests for scheduler interval calculation: CPS→interval ms conversion, jitter bounds within configured percentage, and proptest for CPS range in tests/unit/test_scheduler.rs
-- [ ] T015 [P] [US1] Write failing integration test for full start/stop lifecycle: create profile → start run → verify state=running → stop run → verify state=stopped with stop_reason=manual_stop in tests/integration/test_run_lifecycle.rs
+- [x] T012 [P] [US1] Write failing unit tests for ClickProfile CPS validation: reject <1 and >50, accept 1, 25, 50, and verify default scope is `focused_only` in tests/unit/test_profile_validation.rs
+- [x] T013 [P] [US1] Write failing unit tests for click engine state transitions: `idle→running`, `running→stopped` (manual), invalid transitions rejected, and state query correctness in tests/unit/test_click_engine.rs
+- [x] T014 [P] [US1] Write failing unit tests for scheduler interval calculation: CPS→interval ms conversion, jitter bounds within configured percentage, and proptest for CPS range in tests/unit/test_scheduler.rs
+- [x] T015 [P] [US1] Write failing integration test for full start/stop lifecycle: create profile → start run → verify state=running → stop run → verify state=stopped with stop_reason=manual_stop in tests/integration/test_run_lifecycle.rs
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement ClickProfile validation logic: CPS bounds enforcement (1–50), required field checks, scope default to `focused_only`, hotkey uniqueness validation in src/domain/profile.rs
-- [ ] T017 [US1] Implement click scheduler: CPS-to-interval conversion, optional jitter percentage application (0–30%), sleep-based tick loop with configurable precision in src/engine/scheduler.rs
-- [ ] T018 [US1] Implement click engine state machine: `idle→running→stopped` transitions, start/stop command handling, scheduler integration, and click dispatch loop in src/engine/click_engine.rs
-- [ ] T019 [US1] Implement mouse click synthesis via `enigo`: left/right/middle/double click actions, focused-only scope check before each click in src/infra/input_driver.rs
-- [ ] T020 [US1] Implement window focus detection for default focused-only click scope using platform APIs in src/infra/input_driver.rs
-- [ ] T021 [US1] Implement global hotkey registration and listener for start/stop bindings via `global-hotkey` in src/infra/hotkeys.rs
-- [ ] T022 [US1] Implement view model: bridge between engine state and UI, expose current state/profile/run status as observable properties in src/app/view_model.rs
-- [ ] T023 [US1] Implement neon-green "mad scientist" theme: define color palette, accent colors, widget styling for egui `Visuals` in src/app/theme.rs
-- [ ] T024 [US1] Implement main UI panel: click action selector, CPS input with validation feedback, start/stop buttons, real-time status display (Idle/Running/Stopped), scope mode indicator, and stop reason in src/app/ui.rs
-- [ ] T025 [US1] Wire `eframe::run_native` app launch, tracing init, module bootstrapping, and engine thread spawn in src/main.rs
-- [ ] T026 [US1] Implement event emission for run start, stop, and error events with structured tracing spans in src/domain/events.rs
+- [x] T016 [US1] Implement ClickProfile validation logic: CPS bounds enforcement (1–50), required field checks, scope default to `focused_only`, hotkey uniqueness validation in src/domain/profile.rs
+- [x] T017 [US1] Implement click scheduler: CPS-to-interval conversion, optional jitter percentage application (0–30%), sleep-based tick loop with configurable precision in src/engine/scheduler.rs
+- [x] T018 [US1] Implement click engine state machine: `idle→running→stopped` transitions, start/stop command handling, scheduler integration, and click dispatch loop in src/engine/click_engine.rs
+- [x] T019 [US1] Implement mouse click synthesis via `enigo`: left/right/middle/double click actions, focused-only scope check before each click in src/infra/input_driver.rs
+- [x] T020 [US1] Implement window focus detection for default focused-only click scope using platform APIs in src/infra/input_driver.rs
+- [x] T021 [US1] Implement global hotkey registration and listener for start/stop bindings via `global-hotkey` in src/infra/hotkeys.rs
+- [x] T022 [US1] Implement view model: bridge between engine state and UI, expose current state/profile/run status as observable properties in src/app/view_model.rs
+- [x] T023 [US1] Implement neon-green "mad scientist" theme: define color palette, accent colors, widget styling for egui `Visuals` in src/app/theme.rs
+- [x] T024 [US1] Implement main UI panel: click action selector, CPS input with validation feedback, start/stop buttons, real-time status display (Idle/Running/Stopped), scope mode indicator, and stop reason in src/app/ui.rs
+- [x] T025 [US1] Wire `eframe::run_native` app launch, tracing init, module bootstrapping, and engine thread spawn in src/main.rs
+- [x] T026 [US1] Implement event emission for run start, stop, and error events with structured tracing spans in src/domain/events.rs
 
 **Checkpoint**: User Story 1 is fully functional — user can configure click button/rate, start/stop via UI and hotkey, see real-time status, with neon theme applied
 
@@ -89,19 +89,19 @@
 
 ### Tests for User Story 2 (MANDATORY) ⚠️
 
-- [ ] T027 [P] [US2] Write failing unit tests for stationary detection: position polling detects no-change window, resets on movement, fires eligible after threshold, validates bounds 1–300s in tests/unit/test_conditions.rs
-- [ ] T028 [P] [US2] Write failing unit tests for timed-stop countdown: stops at exact duration, stop_reason=timed_stop, validates bounds 1–300s, proptest for timer range in tests/unit/test_timed_stop.rs
-- [ ] T029 [P] [US2] Write failing integration test for conditional start → timed stop: enable both conditions → start → satisfy stationary → verify running → verify auto-stop at configured duration in tests/integration/test_conditional_run.rs
+- [x] T027 [P] [US2] Write failing unit tests for stationary detection: position polling detects no-change window, resets on movement, fires eligible after threshold, validates bounds 1–300s in tests/unit/test_conditions.rs
+- [x] T028 [P] [US2] Write failing unit tests for timed-stop countdown: stops at exact duration, stop_reason=timed_stop, validates bounds 1–300s, proptest for timer range in tests/unit/test_timed_stop.rs
+- [x] T029 [P] [US2] Write failing integration test for conditional start → timed stop: enable both conditions → start → satisfy stationary → verify running → verify auto-stop at configured duration in tests/integration/test_conditional_run.rs
 
 ### Implementation for User Story 2
 
-- [ ] T030 [US2] Implement `ActivationCondition` model: stationary threshold tracking, focus requirement, eligibility evaluation in src/engine/conditions.rs
-- [ ] T031 [US2] Implement mouse position polling via `device_query`: fixed-cadence sampling, no-change window accumulation, movement reset in src/infra/input_driver.rs
-- [ ] T032 [US2] Implement stationary-start state machine: `idle→waiting_condition` transition when conditions unmet, `waiting_condition→running` when stationary threshold satisfied in src/engine/conditions.rs
-- [ ] T033 [US2] Implement stop-after countdown timer: start countdown on run begin, trigger `running→stopped` with `stop_reason=timed_stop` at expiry in src/engine/click_engine.rs
-- [ ] T034 [US2] Extend RunSession with `waiting_condition` state, `stationary_wait_observed_seconds` tracking, and condition-related stop reasons in src/domain/session.rs
-- [ ] T035 [US2] Update UI to show condition status: "Waiting for stationary…" indicator, countdown timer display, condition settings group with labeled inputs in src/app/ui.rs
-- [ ] T036 [US2] Add event logging for condition-waiting start, stationary threshold met, timed-stop trigger, and stop-before-condition-met edge case in src/domain/events.rs
+- [x] T030 [US2] Implement `ActivationCondition` model: stationary threshold tracking, focus requirement, eligibility evaluation in src/engine/conditions.rs
+- [x] T031 [US2] Implement mouse position polling via `device_query`: fixed-cadence sampling, no-change window accumulation, movement reset in src/infra/input_driver.rs
+- [x] T032 [US2] Implement stationary-start state machine: `idle→waiting_condition` transition when conditions unmet, `waiting_condition→running` when stationary threshold satisfied in src/engine/conditions.rs
+- [x] T033 [US2] Implement stop-after countdown timer: start countdown on run begin, trigger `running→stopped` with `stop_reason=timed_stop` at expiry in src/engine/click_engine.rs
+- [x] T034 [US2] Extend RunSession with `waiting_condition` state, `stationary_wait_observed_seconds` tracking, and condition-related stop reasons in src/domain/session.rs
+- [x] T035 [US2] Update UI to show condition status: "Waiting for stationary…" indicator, countdown timer display, condition settings group with labeled inputs in src/app/ui.rs
+- [x] T036 [US2] Add event logging for condition-waiting start, stationary threshold met, timed-stop trigger, and stop-before-condition-met edge case in src/domain/events.rs
 
 **Checkpoint**: User Stories 1 AND 2 both work independently — conditional start and timed stop layer cleanly onto core clicking
 
@@ -115,23 +115,23 @@
 
 ### Tests for User Story 3 (MANDATORY) ⚠️
 
-- [ ] T037 [P] [US3] Write failing unit tests for profile CRUD: create, rename, duplicate, delete, unique name enforcement (case-insensitive), TOML round-trip serialization in tests/unit/test_profile_persistence.rs
-- [ ] T038 [P] [US3] Write failing unit tests for panic-stop override: panic stops running session regardless of conditions, overrides timed-stop, overrides stationary-wait in tests/unit/test_safety.rs
-- [ ] T039 [P] [US3] Write failing unit tests for max session and cooldown: max duration enforced, cooldown blocks re-start, bounds validation 1–300s in tests/unit/test_safety_policy.rs
-- [ ] T040 [P] [US3] Write failing integration test for profile switch → run: load profile → switch → start run → verify effective settings match selected profile in tests/integration/test_profiles.rs
+- [x] T037 [P] [US3] Write failing unit tests for profile CRUD: create, rename, duplicate, delete, unique name enforcement (case-insensitive), TOML round-trip serialization in tests/unit/test_profile_persistence.rs
+- [x] T038 [P] [US3] Write failing unit tests for panic-stop override: panic stops running session regardless of conditions, overrides timed-stop, overrides stationary-wait in tests/unit/test_safety.rs
+- [x] T039 [P] [US3] Write failing unit tests for max session and cooldown: max duration enforced, cooldown blocks re-start, bounds validation 1–300s in tests/unit/test_safety_policy.rs
+- [x] T040 [P] [US3] Write failing integration test for profile switch → run: load profile → switch → start run → verify effective settings match selected profile in tests/integration/test_profiles.rs
 
 ### Implementation for User Story 3
 
-- [ ] T041 [US3] Implement `SafetyPolicy` model: max session duration, cooldown duration, panic hotkey binding, and validation rules (bounds 1–300 when enabled) in src/engine/safety.rs
-- [ ] T042 [US3] Implement TOML-based profile persistence: save to user app data directory, load all profiles, delete by ID, file-per-profile storage in src/infra/persistence.rs
-- [ ] T043 [US3] Implement profile CRUD operations: create with defaults, rename with uniqueness check, duplicate, delete with confirmation, list all in src/domain/profile.rs
-- [ ] T044 [US3] Implement panic-stop handler: immediate state transition to stopped with `stop_reason=panic_stop`, override all active timers and conditions in src/engine/click_engine.rs
-- [ ] T045 [US3] Implement max session duration enforcement and cooldown timer between runs in src/engine/safety.rs
-- [ ] T046 [US3] Implement last-active profile persistence: save active profile ID on switch, restore on app launch in src/infra/persistence.rs
-- [ ] T047 [US3] Register global panic hotkey binding via `global-hotkey`, ensure it is always active regardless of app focus in src/infra/hotkeys.rs
-- [ ] T048 [US3] Update UI with profile list/selector, create/rename/duplicate/delete controls, safety settings panel, and high-contrast fallback theme toggle in src/app/ui.rs
-- [ ] T049 [US3] Implement high-contrast fallback theme as alternative to neon theme, switchable per profile in src/app/theme.rs
-- [ ] T050 [US3] Add event logging for profile create/switch/delete, panic-stop trigger, max session enforcement, and cooldown block in src/domain/events.rs
+- [x] T041 [US3] Implement `SafetyPolicy` model: max session duration, cooldown duration, panic hotkey binding, and validation rules (bounds 1–300 when enabled) in src/engine/safety.rs
+- [x] T042 [US3] Implement TOML-based profile persistence: save to user app data directory, load all profiles, delete by ID, file-per-profile storage in src/infra/persistence.rs
+- [x] T043 [US3] Implement profile CRUD operations: create with defaults, rename with uniqueness check, duplicate, delete with confirmation, list all in src/domain/profile.rs
+- [x] T044 [US3] Implement panic-stop handler: immediate state transition to stopped with `stop_reason=panic_stop`, override all active timers and conditions in src/engine/click_engine.rs
+- [x] T045 [US3] Implement max session duration enforcement and cooldown timer between runs in src/engine/safety.rs
+- [x] T046 [US3] Implement last-active profile persistence: save active profile ID on switch, restore on app launch in src/infra/persistence.rs
+- [x] T047 [US3] Register global panic hotkey binding via `global-hotkey`, ensure it is always active regardless of app focus in src/infra/hotkeys.rs
+- [x] T048 [US3] Update UI with profile list/selector, create/rename/duplicate/delete controls, safety settings panel, and high-contrast fallback theme toggle in src/app/ui.rs
+- [x] T049 [US3] Implement high-contrast fallback theme as alternative to neon theme, switchable per profile in src/app/theme.rs
+- [x] T050 [US3] Add event logging for profile create/switch/delete, panic-stop trigger, max session enforcement, and cooldown block in src/domain/events.rs
 
 **Checkpoint**: All three user stories are independently functional — profiles persist, safety controls enforce, panic stop overrides all
 
@@ -141,13 +141,13 @@
 
 **Purpose**: Integration polish, release infrastructure, documentation, and validation across all user stories
 
-- [ ] T051 [P] Implement scrollable event log viewer panel showing recent run/stop/condition/error events in src/app/ui.rs
-- [ ] T052 [P] Implement release artifact manifest generation (version, git tag, commit, toolchain, SHA-256) in src/release/reproducibility.rs
-- [ ] T053 [P] Create reproducible build verification script with checksum comparison in scripts/verify-reproducible-build.sh
-- [ ] T054 [P] Create CI workflow for `cargo test`, `cargo clippy`, `cargo fmt --check` on Linux runner in .github/workflows/ci.yml
-- [ ] T055 [P] Create release workflow: Windows cross-compile, `--locked` build, checksum generation, manifest publishing to GitHub Releases in .github/workflows/release.yml
-- [ ] T056 Add README.md with project overview, installation from GitHub Releases, build-from-source instructions, and reproducibility verification guide
-- [ ] T057 Run quickstart.md validation: execute all 9 steps end-to-end, verify TDD workflow, runtime launch, and release reproducibility
+- [x] T051 [P] Implement scrollable event log viewer panel showing recent run/stop/condition/error events in src/app/ui.rs
+- [x] T052 [P] Implement release artifact manifest generation (version, git tag, commit, toolchain, SHA-256) in src/release/reproducibility.rs
+- [x] T053 [P] Create reproducible build verification script with checksum comparison in scripts/verify-reproducible-build.sh
+- [x] T054 [P] Create CI workflow for `cargo test`, `cargo clippy`, `cargo fmt --check` on Linux runner in .github/workflows/ci.yml
+- [x] T055 [P] Create release workflow: Windows cross-compile, `--locked` build, checksum generation, manifest publishing to GitHub Releases in .github/workflows/release.yml
+- [x] T056 Add README.md with project overview, installation from GitHub Releases, build-from-source instructions, and reproducibility verification guide
+- [x] T057 Run quickstart.md validation: execute all 9 steps end-to-end, verify TDD workflow, runtime launch, and release reproducibility
 
 ---
 

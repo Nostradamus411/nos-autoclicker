@@ -10,6 +10,54 @@ repository = "https://github.com/nos/nos-autoclicker"
 name = "nos-autoclicker"
 path = "src/main.rs"
 
+# ── Unit Tests ─────────────────────────────────────────────────────────────────
+
+[[test]]
+name = "test_profile_validation"
+path = "tests/unit/test_profile_validation.rs"
+
+[[test]]
+name = "test_click_engine"
+path = "tests/unit/test_click_engine.rs"
+
+[[test]]
+name = "test_scheduler"
+path = "tests/unit/test_scheduler.rs"
+
+# ── Integration Tests ──────────────────────────────────────────────────────────
+
+[[test]]
+name = "test_run_lifecycle"
+path = "tests/integration/test_run_lifecycle.rs"
+
+[[test]]
+name = "test_conditions"
+path = "tests/unit/test_conditions.rs"
+
+[[test]]
+name = "test_timed_stop"
+path = "tests/unit/test_timed_stop.rs"
+
+[[test]]
+name = "test_conditional_run"
+path = "tests/integration/test_conditional_run.rs"
+
+[[test]]
+name = "test_profile_persistence"
+path = "tests/unit/test_profile_persistence.rs"
+
+[[test]]
+name = "test_safety"
+path = "tests/unit/test_safety.rs"
+
+[[test]]
+name = "test_safety_policy"
+path = "tests/unit/test_safety_policy.rs"
+
+[[test]]
+name = "test_profiles"
+path = "tests/integration/test_profiles.rs"
+
 [dependencies]
 eframe = "0.31"
 egui = "0.31"
@@ -29,6 +77,7 @@ directories = "6"
 
 [dev-dependencies]
 proptest = "1"
+tempfile = "3"
 
 [profile.release]
 lto = true
